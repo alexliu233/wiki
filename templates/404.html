@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}404 - {{ site_name }}{% endblock %}
+{% block content %}
+<div style="text-align:center; padding:80px 0;">
+    <h1 style="color:#ffd700; font-size:4rem; margin-bottom:16px;">404</h1>
+    <p style="color:#888; margin-bottom:24px;">页面不存在</p>
+    <a href="{{ url_for('index') }}" class="btn btn-gold">← 返回首页</a>
+</div>
+{% endblock %}

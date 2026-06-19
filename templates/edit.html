@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if page %}编辑{% else %}创建{% endif %} - {{ site_name }}{% endblock %}
+{% block content %}
+<h2 style="font-size:20px; font-weight:600; margin-bottom:16px;">
+    {% if page %}✏️ 编辑「{{ title }}」{% else %}📝 新建「{{ title }}」{% endif %}
+</h2>
+
+<form method="post">
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <label style="font-size:13px; color:var(--ink-muted-48);">页面标题: <strong>{{ title }}</strong></label>
+            <div style="display:flex; gap:8px;">
+                <button type="submit" class="btn btn-primary">💾 保存</button>
+                <a href="{{ url_for('view_page', title=title) if page else url_for('index') }}" class="btn btn-outline">取消</a>
+            </div>
+        </div>
+        <small style="color:var(--ink-muted-48); display:block; margin-bottom:8px;">支持 Markdown 格式</small>
+        <textarea name="content">{{ page.content if page else '' }}</textarea>
+    </div>
+</form>
+{% endblock %}

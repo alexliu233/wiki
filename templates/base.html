@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --ink:#1d1d1f;
+            --ink-muted-80:#333;
+            --ink-muted-48:#7a7a7a;
+            --canvas:#fff;
+            --parchment:#f5f5f7;
+            --hairline:#e0e0e0;
+            --primary:#0066cc;
+            --primary-focus:#0071e3;
+            --surface-black:#000;
+            --font-body:'SF Pro Text','Noto Sans SC',system-ui,-apple-system,sans-serif;
+            --font-display:'SF Pro Display','Noto Sans SC',system-ui,-apple-system,sans-serif;
+            --radius-sm:8px;
+            --radius-lg:18px;
+            --spacing-sm:12px;
+            --spacing-lg:24px;
+        }
+        html{font-size:16px}
+        body{
+            font-family:var(--font-body);
+            background:var(--parchment);
+            color:var(--ink);
+            -webkit-font-smoothing:antialiased;
+            line-height:1.6;
+            letter-spacing:-0.374px;
+            min-height:100vh;
+        }
+        a{color:var(--primary);text-decoration:none}
+        a:hover{color:var(--primary-focus);text-decoration:underline}
+
+        /* Nav */
+        .nav{
+            background:var(--surface-black);
+            color:#fff;
+            height:44px;
+            display:flex;
+            align-items:center;
+            padding:0 var(--spacing-lg);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+        .nav-brand{
+            font-family:var(--font-display);
+            font-size:14px;
+            font-weight:600;
+            letter-spacing:-0.224px;
+        }
+        .nav-brand a{color:#fff}
+        .nav-brand a:hover{text-decoration:none}
+        .nav-links{
+            margin-left:auto;
+            display:flex;
+            gap:4px;
+        }
+        .nav-links a{
+            padding:6px 12px;
+            font-size:12px;
+            color:rgba(255,255,255,0.6);
+            text-decoration:none;
+            border-radius:var(--radius-sm);
+            transition:all 0.2s;
+        }
+        .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.08);text-decoration:none}
+
+        /* Content */
+        .container{
+            max-width:980px;
+            margin:0 auto;
+            padding:32px var(--spacing-lg);
+        }
+
+        /* Cards */
+        .card{
+            background:var(--canvas);
+            border:1px solid var(--hairline);
+            border-radius:var(--radius-lg);
+            padding:20px;
+            margin-bottom:16px;
+        }
+        .card:hover{border-color:#ccc}
+
+        /* Buttons */
+        .btn{
+            display:inline-block;
+            padding:8px 16px;
+            border-radius:var(--radius-sm);
+            font-size:13px;
+            font-weight:500;
+            cursor:pointer;
+            border:none;
+            transition:all 0.2s;
+            font-family:var(--font-body);
+            letter-spacing:-0.12px;
+            text-decoration:none;
+        }
+        .btn-primary{
+            background:var(--primary);
+            color:#fff;
+        }
+        .btn-primary:hover{background:var(--primary-focus);text-decoration:none}
+        .btn-outline{
+            background:transparent;
+            border:1px solid var(--hairline);
+            color:var(--ink-muted-48);
+        }
+        .btn-outline:hover{border-color:var(--primary);color:var(--primary);text-decoration:none}
+        .btn-danger{
+            background:#c00;
+            color:#fff;
+        }
+        .btn-danger:hover{background:#d00;text-decoration:none}
+
+        /* Forms */
+        textarea, input[type="text"], input[type="password"]{
+            width:100%;
+            padding:10px 14px;
+            background:var(--canvas);
+            border:1px solid var(--hairline);
+            border-radius:var(--radius-sm);
+            color:var(--ink);
+            font-size:15px;
+            font-family:var(--font-body);
+            transition:border-color 0.2s;
+        }
+        textarea:focus, input:focus{outline:none;border-color:var(--primary)}
+        textarea{min-height:400px;font-family:"Fira Code","Consolas",monospace;line-height:1.6}
+
+        /* Messages */
+        .error{
+            background:#fff0f0;
+            border:1px solid #ffcdd2;
+            color:#c00;
+            padding:10px 16px;
+            border-radius:var(--radius-sm);
+            margin-bottom:16px;
+            font-size:14px;
+        }
+        .success{
+            background:#f0fff0;
+            border:1px solid #c8e6c9;
+            color:#2e7d32;
+            padding:10px 16px;
+            border-radius:var(--radius-sm);
+            margin-bottom:16px;
+            font-size:14px;
+        }
+
+        /* Wiki content */
+        .wiki-content h1{font-size:1.8rem;margin:24px 0 12px;font-weight:600}
+        .wiki-content h2{font-size:1.4rem;margin:20px 0 10px;font-weight:600}
+        .wiki-content h3{font-size:1.15rem;margin:16px 0 8px;font-weight:600}
+        .wiki-content p{margin-bottom:12px}
+        .wiki-content ul,.wiki-content ol{margin:8px 0 12px 24px}
+        .wiki-content li{margin-bottom:4px}
+        .wiki-content code{
+            background:var(--parchment);
+            padding:2px 6px;
+            border-radius:4px;
+            font-size:0.85em;
+            color:var(--primary);
+        }
+        .wiki-content pre{
+            background:var(--parchment);
+            border:1px solid var(--hairline);
+            border-radius:6px;
+            padding:14px;
+            overflow-x:auto;
+            margin:12px 0;
+        }
+        .wiki-content pre code{background:none;color:inherit;padding:0}
+        .wiki-content blockquote{
+            border-left:3px solid var(--primary);
+            padding-left:14px;
+            margin:12px 0;
+            color:var(--ink-muted-48);
+        }
+
+        /* Actions */
+        .actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+        .timestamp{color:var(--ink-muted-48);font-size:13px}
+        .meta{color:var(--ink-muted-48);font-size:13px;margin-top:6px}
+
+        /* Login page */
+        .login-box{max-width:400px;margin:60px auto}
+        .login-box h2{font-size:24px;font-weight:600;margin-bottom:24px;text-align:center}
+        .login-box .form-group{margin-bottom:16px}
+        .login-box .form-group label{display:block;font-size:13px;color:var(--ink-muted-48);margin-bottom:6px}
+        .login-box .form-actions{display:flex;gap:10px;margin-top:24px}
+
+        @media(max-width:768px){
+            .container{padding:20px 16px}
+            .nav-links{display:none}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand"><a href="{{ url_for('index') }}">{{ site_name }}</a></div>
+        <div class="nav-links">
+            <a href="/">安飞首页</a>
+            <a href="{{ url_for('index') }}">知识库</a>
+            {% if session.logged_in %}
+                <a href="{{ url_for('logout') }}">退出</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
