@@ -6,23 +6,65 @@
     <a href="{{ url_for('edit_page', title='新页面') }}" class="btn btn-outline">➕ 新建页面</a>
 </div>
 
-<h2 style="font-size:18px; font-weight:600; margin-bottom:16px;">📄 所有页面</h2>
+<style>
+.folder-section{margin-bottom:28px}
+.folder-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--ink-muted-48);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin-bottom:8px;
+  padding:0 4px;
+}
+.page-list{list-style:none;padding:0;margin:0}
+.page-list li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 14px;
+  background:var(--canvas);
+  border:1px solid var(--hairline);
+  border-radius:var(--radius-sm);
+  margin-bottom:4px;
+  transition:border-color 0.15s;
+}
+.page-list li:hover{border-color:#ccc}
+.page-list li a{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none}
+.page-list li a:hover{color:var(--primary)}
+.page-list .meta{font-size:11px;color:var(--ink-muted-48);margin-top:2px}
+.page-list .badge-vault{
+  font-size:10px;padding:1px 8px;border-radius:10px;
+  background:var(--pearl);color:var(--ink-muted-48);
+  letter-spacing:-0.12px;
+}
+</style>
 
-{% if pages %}
+{% for folder, pages in grouped.items() %}
+<div class="folder-section">
+  <div class="folder-title">{{ folder }}</div>
+  <ul class="page-list">
     {% for p in pages %}
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <a href="{{ url_for('view_page', title=p.title) }}" style="font-size:15px; font-weight:500;">
-                    {{ p.title }}
-                </a>
-                <div class="meta">更新于 {{ p.updated_at }}</div>
-            </div>
-            <a href="{{ url_for('edit_page', title=p.title) }}" class="btn btn-outline" style="font-size:12px; padding:4px 12px;">编辑</a>
-        </div>
+    <li>
+      <div>
+        <a href="{{ url_for('view_page', title=p.title) }}">{{ p.title.split('/')[-1] }}</a>
+        <div class="meta">{{ p.updated_at }}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        {% if p.source == 'vault' %}
+          <span class="badge-vault">vault</span>
+        {% endif %}
+        <a href="{{ url_for('edit_page', title=p.title) }}" class="btn btn-outline" style="font-size:11px;padding:3px 10px;">编辑</a>
+      </div>
+    </li>
     {% endfor %}
-{% else %}
-    <div class="card" style="text-align:center; color:var(--ink-muted-48);">
-        暂无页面 — <a href="{{ url_for('edit_page', title='首页') }}">创建首页</a>
-    </div>
+  </ul>
+</div>
+{% endfor %}
+
+{% if not grouped %}
+<div class="card" style="text-align:center;color:var(--ink-muted-48);">
+    暂无内容 — <a href="{{ url_for('edit_page', title='首页') }}">创建首页</a>
+</div>
 {% endif %}
 {% endblock %}
